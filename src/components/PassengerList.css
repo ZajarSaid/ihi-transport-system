@@ -1,0 +1,70 @@
+.passenger-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.passenger-empty {
+  font-size: 13px;
+  color: var(--color-text-light);
+  margin: 0 0 4px;
+}
+
+.passenger-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.passenger-index {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.passenger-row .form-control {
+  max-width: 320px;
+}
+
+.passenger-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.passenger-actions .btn {
+  padding: 6px 10px;
+  line-height: 1;
+}
+
+.btn-danger {
+  color: var(--color-danger);
+  border-color: #fecaca;
+}
+
+.btn-danger:hover {
+  background: #fef2f2;
+}
+
+@media (max-width: 600px) {
+  .passenger-row {
+    align-items: flex-start;
+  }
+
+  .passenger-row .form-control {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .passenger-actions .btn {
+    padding: 6px 9px;
+  }
+}

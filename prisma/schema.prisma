@@ -1,0 +1,320 @@
+// Transport Request System — data model
+//
+// SQLite today, Postgres later (Phase 7). Nothing here is SQLite-specific:
+// there are no enums (SQLite has none) and no native types, so the Postgres
+// cutover is a datasource swap plus a migration.
+//
+// `status` and `role` are plain strings on purpose. The status values must
+// stay byte-identical to REQUEST_STATUSES in src/utils/statusConfig.js —
+// there is no translation table, so the strings are the contract.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ---------------------------------------------------------------------------
+// Accounts
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String
+  role          String    @default("applicant")
+  title         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  createdRequests TransportRequest[] @relation("RequestCreator")
+  auditLogs       AuditLog[]         @relation("AuditActor")
+
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------------------------------------------------------------------------
+// Reference data
+// ---------------------------------------------------------------------------
+
+model Branch {
+  id   String @id
+  name String @unique
+
+  requests TransportRequest[]
+}
+
+model CostCenter {
+  id   String  @id
+  name String?
+
+  projects Project[]
+  requests TransportRequest[]
+}
+
+model Project {
+  id           String @id
+  name         String @unique
+  costCenterId String
+
+  costCenter CostCenter        @relation(fields: [costCenterId], references: [id])
+  requests   TransportRequest[]
+}
+
+model TransportRate {
+  id        Int    @id @default(autoincrement())
+  vehicle   String
+  rate      String
+  sortOrder Int    @default(0)
+}
+
+model TransportInstruction {
+  id        Int    @id @default(autoincrement())
+  text      String
+  sortOrder Int    @default(0)
+}
+
+// ---------------------------------------------------------------------------
+// Fleet
+// ---------------------------------------------------------------------------
+
+model Vehicle {
+  id           String  @id
+  registration String  @unique
+  type         String
+  capacity     Int
+  available    Boolean @default(true)
+
+  allocations TransportAllocation[]
+}
+
+model Driver {
+  id        String  @id
+  name      String
+  phone     String
+  email     String  @unique
+  available Boolean @default(true)
+
+  allocations TransportAllocation[]
+}
+
+// ---------------------------------------------------------------------------
+// Transport request
+// ---------------------------------------------------------------------------
+
+model TransportRequest {
+  id              String    @id
+  referenceNumber String    @unique
+  status          String
+  submittedAt     DateTime?
+  completedAt     DateTime?
+
+  // applicant block
+  applicantName        String
+  applicantBranchId    String
+  applicantPhone       String
+  applicantEmail       String
+  applicantProjectId   String
+  applicantCostCenterId String
+
+  // trip block
+  travelDate        DateTime
+  departureTime     String
+  passengerCount    Int
+  origin            String
+  destination       String
+  estimatedDuration String
+  reason            String
+
+  createdById   String
+  createdByName String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  branch     Branch     @relation(fields: [applicantBranchId], references: [id])
+  project    Project    @relation(fields: [applicantProjectId], references: [id])
+  costCenter CostCenter @relation(fields: [applicantCostCenterId], references: [id])
+  createdBy  User       @relation("RequestCreator", fields: [createdById], references: [id])
+
+  passengers          Passenger[]
+  declaration         ApplicantDeclaration?
+  approvals           Approval[]
+  allocation          TransportAllocation?
+  signatures          Signature[]
+  auditLogs           AuditLog[]
+
+  @@index([status])
+  @@index([createdById])
+  @@index([applicantCostCenterId])
+  @@index([applicantBranchId])
+}
+
+model Passenger {
+  id        String @id @default(cuid())
+  requestId String
+  name      String
+  position  Int
+
+  request TransportRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@unique([requestId, position])
+}
+
+model ApplicantDeclaration {
+  id            String    @id @default(cuid())
+  requestId     String    @unique
+  confirmed     Boolean
+  applicantName String
+  date          DateTime
+  signatureId   String?  @unique
+  /// A name typed instead of an uploaded file. The client renders a bare
+  /// string as the typed signature, so it must not become a Signature row.
+  typedSignature String?
+
+  request   TransportRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  signature Signature?        @relation("DeclarationSignature", fields: [signatureId], references: [id])
+}
+
+/// One row per approval stage. `stage` is one of
+/// cost_center | branch_manager | accountant — the same three stages the
+/// client-side code keeps in `costCenterApproval`, `branchManagerApproval`
+/// and `fundsConfirmation`.
+model Approval {
+  id        String   @id @default(cuid())
+  requestId String
+  stage     String
+  approved  Boolean
+  name      String
+  date      DateTime
+  comment   String?
+
+  // accountant stage only
+  fundsAvailable Boolean?
+  project        String?
+  costCenter     String?
+  branch         String?
+
+  signatureId String?
+
+  request   TransportRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  signature Signature?        @relation("ApprovalSignature", fields: [signatureId], references: [id])
+
+  @@unique([requestId, stage])
+}
+
+model TransportAllocation {
+  id        String   @id @default(cuid())
+  requestId String   @unique
+  /// Nullable so that retiring a vehicle or a driver does not delete the
+  /// trip they served. The allocation keeps its own `vehicleName` /
+  /// `driverName` snapshot for the printed form.
+  vehicleId String?
+  driverId  String?
+  date      DateTime
+  assignedBy String
+
+  instructions String?
+  vehicleName  String?
+  driverName   String?
+  /// Snapshots of the driver's contact details at assignment time. The
+  /// printed transport form shows them, and they must survive edits or the
+  /// retirement of the Driver row.
+  driverPhone  String?
+  driverEmail  String?
+
+  signatureId String? @unique
+
+  request   TransportRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  vehicle   Vehicle?         @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  driver    Driver?          @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  signature Signature?       @relation("AllocationSignature", fields: [signatureId], references: [id])
+}
+
+/// A signature is stored as real bytes. The client still receives a data URL
+/// so that <img src={signature.data}> keeps working unchanged.
+model Signature {
+  id        String   @id @default(cuid())
+  requestId String?
+  fileName  String
+  fileType  String
+  data      Bytes
+  createdAt DateTime @default(now())
+
+  request     TransportRequest?      @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  declaration ApplicantDeclaration? @relation("DeclarationSignature")
+  approvals   Approval[]             @relation("ApprovalSignature")
+  allocation  TransportAllocation?   @relation("AllocationSignature")
+
+  @@index([requestId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  requestId  String
+  action     String
+  fromStatus String?
+  toStatus   String?
+  note       String?
+  actorId    String?
+  actorName  String?
+  actorRole  String?
+  createdAt  DateTime @default(now())
+
+  request TransportRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  actor   User?            @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([requestId, createdAt])
+}
+
+/// One row per calendar year; `lastValue` is the last sequence number handed
+/// out. Phase 7 allocates TR-YYYY-NNNN from here inside a transaction.
+model ReferenceCounter {
+  id        String @id
+  year      Int    @unique
+  lastValue Int    @default(0)
+}

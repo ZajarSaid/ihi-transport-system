@@ -1,0 +1,54 @@
+/*
+ * Transport Request System — global stylesheet
+ *
+ * Layer order is declared explicitly so the cascade is deterministic:
+ *   theme     -> Tailwind design tokens (custom properties only)
+ *   base      -> (reserved; Tailwind Preflight is intentionally NOT included)
+ *   components-> the legacy hand-written CSS, in the exact cascade order that
+ *                the Vite production bundle used
+ *   utilities -> Tailwind utility classes (on-demand, unused by legacy markup)
+ *
+ * Preflight is deliberately excluded: it is a CSS reset and would change the
+ * rendering of the existing markup.
+ */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme' layer(theme);
+@import 'tailwindcss/utilities' layer(utilities);
+
+/* --------------------------------------------------------------------------
+ * Legacy stylesheets — order below is load-bearing.
+ * It is the exact concatenation order of the former Vite production bundle,
+ * so the 22 selectors that are defined in more than one file (e.g.
+ * `.page-header`, `.nav-link.active`, `.data-table th`) resolve to the same
+ * winner they always did. Do not reorder without checking those.
+ * ----------------------------------------------------------------------- */
+@import '../src/components/Toast.css' layer(components);
+@import '../src/index.css' layer(components);
+@import '../src/components/Sidebar.css' layer(components);
+@import '../src/components/TopNav.css' layer(components);
+@import '../src/layouts/MainLayout.css' layer(components);
+@import '../src/components/DashboardStats.css' layer(components);
+@import '../src/components/StatusBadge.css' layer(components);
+@import '../src/screens/Home.css' layer(components);
+@import '../src/screens/auth/Login.css' layer(components);
+@import '../src/components/ConfirmModal.css' layer(components);
+@import '../src/screens/requests/RequestList.css' layer(components);
+@import '../src/components/SectionCard.css' layer(components);
+@import '../src/components/FormField.css' layer(components);
+@import '../src/components/PassengerList.css' layer(components);
+@import '../src/components/SignatureUpload.css' layer(components);
+@import '../src/components/TransportRequestForm.css' layer(components);
+@import '../src/screens/requests/NewRequest.css' layer(components);
+@import '../src/screens/requests/EditRequest.css' layer(components);
+@import '../src/components/DetailSection.css' layer(components);
+@import '../src/screens/requests/RequestDetail.css' layer(components);
+@import '../src/screens/requests/RequestStatus.css' layer(components);
+@import '../src/screens/requests/PrintRequest.css' layer(components);
+@import '../src/screens/admin/AdminDashboard.css' layer(components);
+@import '../src/screens/admin/AdminRequests.css' layer(components);
+@import '../src/components/RequestSummaryCard.css' layer(components);
+@import '../src/components/ApprovalAction.css' layer(components);
+@import '../src/screens/approvals/ApprovalPage.css' layer(components);
+@import '../src/screens/transport/TransportDashboard.css' layer(components);
+@import '../src/screens/transport/FleetList.css' layer(components);

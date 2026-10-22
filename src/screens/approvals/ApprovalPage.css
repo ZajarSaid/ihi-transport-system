@@ -1,0 +1,140 @@
+.approval-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.approval-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.queue-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.queue-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.queue-card.selected {
+  border-color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+  background: #f5f8ff;
+}
+
+.queue-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.queue-reference {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.queue-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.queue-line:last-child {
+  margin-bottom: 0;
+}
+
+.queue-label {
+  color: var(--color-text-light);
+}
+
+.queue-value {
+  color: var(--color-text-dark);
+  font-weight: 500;
+}
+
+.approval-panel {
+  min-width: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.action-panel-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin: 0 0 16px;
+}
+
+.action-panel .signature-upload,
+.finance-panel .signature-upload {
+  max-width: 480px;
+  margin-bottom: 14px;
+}
+
+.finance-panel {
+  padding: 20px;
+}
+
+.finance-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.finance-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.finance-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-light);
+}
+
+.finance-value {
+  font-size: 14px;
+  color: var(--color-text-dark);
+}
+
+@media (max-width: 900px) {
+  .approval-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .finance-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .approval-panel,
+  .finance-panel {
+    padding: 16px;
+  }
+}

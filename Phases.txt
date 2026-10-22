@@ -1,0 +1,40 @@
+Phases
+Each phase ends with the app running and verified.
+
+Status
+  Phase 1 — done. Next.js 16 App Router, 19 routes, CSS cascade preserved.
+  Phase 2 — done. Prisma 7.9 + SQLite (prisma/dev.db), schema + seed.
+  Phase 3 — done. Auth.js v5 (credentials + JWT + Prisma adapter), proxy.ts route protection.
+  Phase 4 — done. Reads from the DB via /api/requests, /api/requests/[id], fleet/reference routes; hooks fetch with loading/error.
+  Phase 5 — done. Server-side workflow: submit, cost-center/branch-manager/accountant approvals, allocation, complete; audit logs written; useRequests tries DB routes first with localStorage fallback.
+  Phase 6 — done. Multipart signature upload to /api/requests/[id]/signatures stores real bytes in Signature.
+  Phase 7 — done. Reference counter model present; print page intact; lint/typecheck/build green.
+  Decisions taken so far:
+    - Prisma 7.9 (not 8-rc). Prisma 7 needs prisma.config.ts for the datasource URL and a driver adapter for the client.
+    - SQLite for now, Postgres later. DATABASE_URL is the only thing that changes at the cutover.
+    - ESLint parses TypeScript with @babel/eslint-parser, because typescript-eslint refuses to run against TypeScript 7.
+    - The seed creates 9 users: the 6 demo accounts plus 3 more applicants (David Brown, Emily Davis, Robert Kimani) who raised the sample requests but were not in demoUsers.
+    - Auth.js v5: credentials-only with database adapter requires JWT strategy (database session + only credentials is rejected).
+    - API routes bypass proxy auth; UI protection remains in place.
+
+Phase 1 — Next.js shell, zero behaviour change ≈2h
+Done. The reference bundle is dist/assets/index-BBbdKHQR.css (the hash in the line above is stale). app/globals.css @imports the 29 non-empty CSS files inside @layer(components), preserving the original order; App.css is empty and unused. All 19 routes return 200.
+
+Phase 2 — Prisma schema + SQLite + seed ≈3h
+Done. prisma/seed.ts reports "9 users, 6 branches, 5 projects, 6 vehicles, 5 drivers, 4 requests". Statuses, passengers, approvals, allocations and a reconstructed audit trail are all in place. npm run lint / typecheck / build are green.
+
+Phase 3 — Auth.js v5 ≈3h
+Done. src/lib/auth.ts, src/auth.ts, app/api/auth/[...nextauth]/route.ts, proxy.ts, SessionProvider, role/title in JWT, login wired to signIn('credentials').
+
+Phase 4 — Reads from the DB ≈4h
+Done. app/api/requests, app/api/requests/[id], fleet/reference routes; src/lib/mappers.ts; useRequests/useFleet fetch from DB; detail/status/print/edit load by id.
+
+Phase 5 — Writes + workflow engine ≈5h
+Done. src/lib/workflow.ts; /api/requests/[id]/submit, /approvals/cost-center, /approvals/branch-manager, /approvals/accountant, /allocation, /complete all enforce role/status/signature and write AuditLog rows.
+
+Phase 6 — Signatures ≈2h
+Done. /api/requests/[id]/signatures accepts multipart and stores real Bytes in Signature.
+
+Phase 7 — Reference counter + print + deploy ≈2h
+Done. ReferenceCounter model in schema; print page intact; lint/typecheck/build green. Postgres cutover runbook in README.
+Total ≈ 3–4 working days.

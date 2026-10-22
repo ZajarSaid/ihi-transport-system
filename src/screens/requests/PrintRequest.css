@@ -1,0 +1,338 @@
+@page {
+  size: A4 portrait;
+  margin: 10mm 12mm 12mm;
+}
+
+.print-page {
+  max-width: 200mm;
+  margin: 0 auto;
+}
+
+.print-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.print-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.print-form {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 10mm 9mm;
+  color: #1f2937;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* ---------- header ---------- */
+
+.print-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #334155;
+}
+
+.print-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.print-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.print-logo {
+  height: 54px;
+  width: auto;
+  max-width: 80mm;
+  object-fit: contain;
+  margin-bottom: 2px;
+}
+
+.print-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.print-brand-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #111827;
+}
+
+.print-brand-sub {
+  font-size: 9.5px;
+  letter-spacing: 0.3px;
+  color: #4b5563;
+}
+
+.print-title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #111827;
+  margin: 0;
+}
+
+.print-ref {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  border: 1px solid #334155;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+}
+
+.print-ref-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #4b5563;
+}
+
+.print-ref-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ---------- sections ---------- */
+
+.print-section {
+  margin-bottom: 6px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.print-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #1f2937;
+  margin: 0 0 5px;
+}
+
+.print-section-title::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #334155;
+}
+
+.print-section-body {
+  padding-left: 0;
+}
+
+/* ---------- inline ruled fields ---------- */
+
+.print-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 3px 14px;
+  margin-bottom: 2px;
+}
+
+.print-line:last-child {
+  margin-bottom: 0;
+}
+
+.print-field {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex: 1 1 130px;
+  min-width: 0;
+}
+
+.print-field-full {
+  flex: 1 1 100%;
+}
+
+.print-field-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.print-field-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+  padding: 0 3px 1px;
+  border-bottom: 1px solid #94a3b8;
+  overflow-wrap: break-word;
+}
+
+/* ---------- lists & notes ---------- */
+
+.print-passengers {
+  margin: 0;
+  padding-left: 16px;
+  columns: 2;
+  column-gap: 18px;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.print-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 22px;
+}
+
+.print-subhead {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #374151;
+  margin: 0 0 2px;
+}
+
+.print-rates {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.print-empty {
+  font-size: 11.5px;
+  font-style: italic;
+  color: #6b7280;
+  margin: 0;
+}
+
+.not-found {
+  padding: 48px 32px;
+  text-align: center;
+  max-width: 560px;
+  margin: 40px auto;
+}
+
+.no-print {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .print-form {
+    padding: 24px 16px;
+  }
+
+  .print-title {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 600px) {
+  .print-field {
+    flex: 1 1 100%;
+  }
+
+  .print-passengers {
+    columns: 1;
+  }
+
+  .print-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .print-form {
+    padding: 20px 12px;
+  }
+
+  .print-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 400px) {
+  .print-title {
+    font-size: 15px;
+    letter-spacing: 0.5px;
+  }
+
+  .print-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .print-header-left,
+  .print-header-brand {
+    justify-content: center;
+  }
+
+  .print-brand-text {
+    text-align: left;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .sidebar,
+  .topnav,
+  .print-toolbar {
+    display: none !important;
+  }
+
+  .main-content {
+    padding: 0;
+    background: #fff;
+  }
+
+  .main-area {
+    margin-left: 0;
+  }
+
+  .print-page {
+    max-width: none;
+  }
+
+  .print-form {
+    border: none;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .print-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .print-field-value {
+    border-bottom-color: #64748b;
+  }
+}

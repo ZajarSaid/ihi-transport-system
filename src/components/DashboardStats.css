@@ -1,0 +1,71 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-text-light);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-total {
+  border-top-color: #6366f1;
+}
+
+.stat-pending {
+  border-top-color: var(--color-warning);
+}
+
+.stat-approved {
+  border-top-color: var(--color-success);
+}
+
+.stat-rejected {
+  border-top-color: var(--color-danger);
+}
+
+.stat-upcoming {
+  border-top-color: var(--color-info);
+}
+
+.stat-completed {
+  border-top-color: var(--color-primary);
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

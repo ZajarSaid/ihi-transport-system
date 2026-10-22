@@ -1,0 +1,12 @@
+.notice {
+  padding: 48px 32px;
+  text-align: center;
+  max-width: 560px;
+  margin: 40px auto;
+}
+
+.notice-text {
+  color: var(--color-text-light);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}

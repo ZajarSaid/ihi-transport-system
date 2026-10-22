@@ -1,0 +1,96 @@
+.request-summary {
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.summary-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.summary-reference {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-right: 10px;
+}
+
+.summary-date {
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.summary-applicant {
+  margin-bottom: 10px;
+}
+
+.summary-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-light);
+  margin-right: 8px;
+}
+
+.summary-value {
+  font-size: 14px;
+  color: var(--color-text-dark);
+}
+
+.summary-trip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.summary-trip > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-arrow {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.summary-passengers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.summary-dot {
+  color: var(--color-text-light);
+  margin: 0 4px;
+}
+
+.summary-reason {
+  margin-bottom: 14px;
+}
+
+.summary-reason .summary-label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .request-summary {
+    padding: 14px 16px;
+  }
+}

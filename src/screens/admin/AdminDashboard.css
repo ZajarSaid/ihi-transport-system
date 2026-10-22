@@ -1,0 +1,184 @@
+.admin-stat-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* ── Decorated stat cards (top row) ─────────────────────────────── */
+.admin-stat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--stat-tone, var(--color-text-light));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-stat::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--stat-tone, #94a3b8) 10%, transparent)
+  );
+  pointer-events: none;
+}
+
+.admin-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  font-size: 20px;
+  color: var(--stat-tone, var(--color-text-light));
+  background: color-mix(in srgb, var(--stat-tone, #94a3b8) 14%, #fff);
+}
+
+.admin-stat-body {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.admin-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.admin-stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-light);
+}
+
+.admin-stat-total {
+  --stat-tone: #6366f1;
+}
+
+.admin-stat-pending {
+  --stat-tone: var(--color-warning);
+}
+
+.admin-stat-approved {
+  --stat-tone: var(--color-success);
+}
+
+.admin-stat-rejected {
+  --stat-tone: var(--color-danger);
+}
+
+.admin-stat-upcoming {
+  --stat-tone: var(--color-info);
+}
+
+.admin-stat-completed {
+  --stat-tone: var(--color-primary);
+}
+
+/* ── Tables below ───────────────────────────────────────────────── */
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 20px;
+  align-items: start;
+}
+
+.status-card-admin {
+  padding: 16px 20px;
+}
+
+.status-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.status-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.status-bar-label {
+  width: 170px;
+  text-align: right;
+  color: var(--color-text-dark);
+  font-weight: 500;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-bar-track {
+  flex: 1;
+  height: 10px;
+  background: var(--color-border);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.status-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.status-bar-count {
+  width: 24px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-stat-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-stat-list {
+    grid-template-columns: 1fr;
+  }
+
+  .status-bar-label {
+    width: 110px;
+  }
+
+  .status-card-admin {
+    padding: 14px 16px;
+  }
+}
