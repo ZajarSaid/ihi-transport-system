@@ -56,5 +56,10 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.2.2"
+  },
+  "overrides": {
+    "eslint-plugin-react-hooks": {
+      "@babel/core": "^8.0.7"
+    }
   }
 }
