@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import { render } from '@react-email/render'
+import { render } from 'react-email'
 import DriverAssignmentEmail, {
   type DriverAssignmentEmailProps,
 } from '../emails/DriverAssignmentEmail'
